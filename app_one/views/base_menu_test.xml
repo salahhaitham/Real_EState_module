@@ -1,0 +1,19 @@
+<odoo>
+
+    <!-- Root Menu -->
+    <menuitem id="estate_menu_root"
+              name="Real Estate"
+              sequence="1"
+             />
+
+    <!-- Sub Menu -->
+    <menuitem id="properties_id"
+              name="Properties"
+              parent="estate_menu_root"/>
+
+    <menuitem id="property_view_id"
+              name="Properties"
+              parent="properties_id"
+              action="action_estate_test_v3"/>
+
+</odoo>

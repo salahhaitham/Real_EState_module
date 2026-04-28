@@ -1,0 +1,31 @@
+.o_list_view .tree_style,
+.o_list_view .tree_style table,
+.o_list_view .o_list_table.tree_style,
+.o_list_view .tree_style .o_list_table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.o_list_view .o_list_table.tree_style thead th,
+.o_list_view .o_list_table.tree_style tbody td,
+.o_list_view .tree_style .o_list_table thead th,
+.o_list_view .tree_style .o_list_table tbody td {
+    text-align: center !important;
+    color: #fff !important;
+    vertical-align: middle;
+}
+
+.o_list_view .o_list_table.tree_style th[data-name],
+.o_list_view .o_list_table.tree_style td.o_data_cell,
+.o_list_view .tree_style .o_list_table th[data-name],
+.o_list_view .tree_style .o_list_table td.o_data_cell {
+    width: auto;
+    min-width: 90px;
+}
+
+.o_form_view .o_form_statusbar .o_property_state_btn {
+    display: inline-flex !important;
+    white-space: nowrap;
+    margin-inline-end: 8px;
+    vertical-align: middle;
+}

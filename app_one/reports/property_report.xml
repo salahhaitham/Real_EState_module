@@ -1,0 +1,95 @@
+<odoo>
+
+    <record id="property_report_id" model="ir.actions.report">
+        <field name="name">property report</field>
+        <field name="model">property</field>
+         <field name="binding_model_id" ref="model_property"></field>
+         <field name="binding_type">report</field>
+         <field name="report_type">qweb-pdf</field>
+         <field name="report_name">app_one.property_template_id</field>
+    </record>
+<template id="property_template_id">
+    <t t-call="web.html_container">
+        <t t-call="web.external_layout">
+ <style>
+                     .property-report-title {
+                         margin-bottom: 18px;
+                     }
+
+                     .property-report-table {
+                         width: 100%;
+                         margin-top: 12px;
+                         border-collapse: collapse;
+                         font-size: 13px;
+                     }
+
+                     .property-report-table thead th {
+                         padding: 10px 12px;
+                         border: 1px solid #d6d9dc;
+                         background-color: #eef1f4;
+                         color: #243447;
+                         text-align: left;
+                         text-transform: uppercase;
+                         letter-spacing: 0.5px;
+                     }
+
+                     .property-report-table tbody td {
+                         padding: 10px 12px;
+                         border: 1px solid #d6d9dc;
+                         color: #2f3b45;
+                     }
+
+                     .property-report-table .label-cell {
+                         width: 32%;
+                         font-weight: 600;
+                         background-color: #f8f9fb;
+                     }
+                 </style>
+
+            <div class="page">
+                <t t-foreach="docs" t-as="rec">
+
+                    <h1>Property Report</h1>
+
+                   <table class="property-report-table">
+    <thead>
+        <tr>
+            <th colspan="2">General Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="label-cell">Property Name</td>
+            <td><span t-out="rec.name or ''"/></td>
+        </tr>
+        <tr>
+            <td class="label-cell">Selling Price</td>
+            <td><span t-out="rec.selleing_price or ''"/></td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="property-report-table">
+    <thead>
+        <tr>
+            <th colspan="2">Additional Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="label-cell">Owner Name</td>
+            <td><span t-out="rec.owner_id or ''"/></td>
+        </tr>
+        <tr>
+            <td class="label-cell">Owner Phone</td>
+            <td><span t-out="rec.owner_phone or ''"/></td>
+        </tr>
+    </tbody>
+</table>
+
+                </t>
+            </div>
+
+        </t>
+    </t>
+</template></odoo>

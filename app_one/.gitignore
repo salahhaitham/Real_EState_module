@@ -1,0 +1,7 @@
+venv/
+*.deb
+__pycache__/
+*.pyc
+*.log
+.odoo*
+addons/

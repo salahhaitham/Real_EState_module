@@ -1,0 +1,44 @@
+.o_list_view.tree_style .o_list_table,
+.o_list_view .tree_style .o_list_table,
+.o_content .tree_style .o_list_table {
+    width: 100% !important;
+    table-layout: fixed !important;
+}
+
+.o_list_view.tree_style .o_list_table thead > tr > th,
+.o_list_view.tree_style .o_list_table tbody > tr > td,
+.o_list_view .tree_style .o_list_table thead > tr > th,
+.o_list_view .tree_style .o_list_table tbody > tr > td,
+.o_content .tree_style .o_list_table thead > tr > th,
+.o_content .tree_style .o_list_table tbody > tr > td {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.o_list_view.tree_style .o_list_table thead > tr > th,
+.o_list_view .tree_style .o_list_table thead > tr > th,
+.o_content .tree_style .o_list_table thead > tr > th {
+    color: #ffffff !important;
+    background-color: #73a7f3 !important;
+}
+
+.o_list_view.tree_style .o_list_table tbody > tr > td,
+.o_list_view .tree_style .o_list_table tbody > tr > td,
+.o_content .tree_style .o_list_table tbody > tr > td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.o_list_view.tree_style .o_list_table tbody > tr:not(.text-danger) > td,
+.o_list_view .tree_style .o_list_table tbody > tr:not(.text-danger) > td,
+.o_content .tree_style .o_list_table tbody > tr:not(.text-danger) > td {
+    color: #000000 !important;
+}
+
+.o_list_view.tree_style .o_list_table tbody > tr.text-danger > td,
+.o_list_view .tree_style .o_list_table tbody > tr.text-danger > td,
+.o_content .tree_style .o_list_table tbody > tr.text-danger > td {
+    color: #b42318 !important;
+    background-color: #fef3f2;
+}

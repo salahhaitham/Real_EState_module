@@ -1,0 +1,50 @@
+<odoo>
+     <record id="property_tree_view" model="ir.ui.view">
+         <field name="name">property </field>
+         <field name="model">property</field>
+         <field name="arch" type="xml">
+              <list>
+                  <field name="name"/>
+                   <field name="description"/>
+                   <field name="date_available"/>
+                  <field name="garage"/>
+                  <field name="garden"/>
+                  <field name="garden_orientation"/>
+                    <field name="bathrooms" optional="1"/>
+
+              </list>
+         </field>
+
+     </record>
+    <record id="properties_action" model="ir.actions.act_window">
+        <field name="name">property Action</field>
+        <field name="res_model">property</field>
+    </record>
+
+<menuitem id="properties_view_id" name="properties" parent="properties_menu" action="properties_action"/>
+</odoo>
+
+
+
+<odoo>
+
+    <record id="property_report_action_id" model="ir.actions.report">
+        <field name="name">property report</field>
+        <field name="model">property</field>
+         <field name="binding_model_id" ref="model_property"></field>
+          <field name="report_type" >qweb-pdf</field>
+          <field name="binding_type" >report</field>
+        <field name="report_name" >app_one.property_report_template_id</field>
+    </record>
+    <template id="property_report_template_id">
+        <t t-call="web.html_container">
+        <t t-call="web.external_layout">
+        <t t-foreach="docs" t-as="rec">
+                   <h1 >property report</h1>
+
+        </t>
+          </t>
+        </t>
+
+    </template>
+</odoo>
