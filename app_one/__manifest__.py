@@ -1,5 +1,5 @@
 {
-    'name': 'App One',
+    'name': 'Real Estate Management',
     'version': '1.0',
     'summary': 'My first custom module',
     'description': """
@@ -22,6 +22,8 @@
         'views/tag_view.xml',
         'views/sales_view_form.xml',
         'reports/property_report.xml',
+        'data/property_sequence.xml',
+        'views/property_history_view.xml',
 
 
 

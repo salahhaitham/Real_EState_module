@@ -1,0 +1,13 @@
+<odoo>
+
+
+    <odoo>
+    <record id="seq_property" model="ir.sequence">
+        <field name="name">property Sequence</field>
+        <field name="code">property_seq</field>
+        <field name="prefix">PPT/</field>
+        <field name="padding">4</field>
+        <field name="number_next">1</field>
+    </record>
+</odoo>
+</odoo>

@@ -1,6 +1,7 @@
 from psycopg2._psycopg import Boolean
 
 from odoo import api, fields, models
+from odoo.cli.scaffold import env
 from odoo.exceptions import ValidationError
 
 
@@ -10,6 +11,7 @@ class Property(models.Model):
     _inherit = ['mail.thread','mail.activity.mixin']
 
     name=fields.Char(size=2)
+    ref=fields.Char(default='New')
     post_code = fields.Char(required=True)
     livig_area = fields.Integer(required=True)
     faceds = fields.Integer()
@@ -64,8 +66,16 @@ class Property(models.Model):
        for record in property_ids:
             if record.expected_selling_date and record.expected_selling_date<fields.Datetime.today():
                      record.is_late=True
-            
 
+            
+    def create_history_record(self,old_state,new_state):
+       for record in self:
+           record.env['property.history'].create({
+                  'property_id':record.id,
+                   'user_id':record.env.user.id,
+                   'old_state':old_state,
+                    'new_state':new_state,
+                })
 
 
     @api.constrains('livig_area')
@@ -85,8 +95,10 @@ class Property(models.Model):
 
     def create(self,vals_list):
         res=super().create(vals_list)
-        print("create method")
-        return res
+        if res.ref=='New':
+            res.ref=self.env['ir.sequence'].next_by_code('property_seq')
+        return  res
+
 
     @api.model
     def web_search_read(self, *args, **kwargs):
@@ -107,15 +119,19 @@ class Property(models.Model):
 
 
     def draft_button(self):
+        self.create_history_record(self.state, 'draft')
         self.write({'state': 'draft'})
 
     def pending_button(self):
+        self.create_history_record(self.state, 'pending')
         self.write({'state': 'pending'})
 
     def sold_button(self):
+        self.create_history_record(self.state, 'sold')
         self.write({'state': 'sold'})
 
     def close_button(self):
+        self.create_history_record(self.state, 'closed')
         for rec in self:
             rec.state='closed'
 
