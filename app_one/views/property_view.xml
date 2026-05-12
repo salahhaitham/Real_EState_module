@@ -51,7 +51,8 @@
         <form >
             <sheet>
                 <header >
-                    <button name="draft_button" string="Draft" type="object" class="btn_primary" invisible="state == 'draft'"/>
+
+                    <button name="draft_button" string="Draft" type="object" class="btn_primary" invisible="state in ('draft','closed')"/>
                     <button name="pending_button" string="Pending" type="object" class="btn_secondary" invisible="state != 'draft'"/>
                     <button name="sold_button" string="Sold" type="object" class="btn_success" invisible="state != 'pending'"/>
                      <field name="state" widget="statusbar" statusbar_visible="draft,pending,sold,closed"/>
@@ -63,30 +64,30 @@
     </h1>
     <label for="name"/>
     <h3>
-        <field name="name"/>
+        <field name="name" readonly="state=='closed'"/>
     </h3>
 </div>
                 <group>
                     <group string="general_info">
-                        <field name="faceds"/>
-                        <field name="owner_id"/>
-                        <field name="owner_phone"/>
-                        <field name="owner_address"/>
-                        <field name="livig_area"/>
-                        <field name="date_available"/>
-                        <field name="garage"/>
-                         <field name="selleing_price"/>
-                           <field name="expected_price"/>
+                        <field name="faceds" readonly="state=='closed'"/>
+                        <field name="owner_id" readonly="state=='closed'"/>
+                        <field name="owner_phone" readonly="state=='closed'"/>
+                        <field name="owner_address" readonly="state=='closed'"/>
+                        <field name="livig_area" readonly="state=='closed'"/>
+                        <field name="date_available" readonly="state=='closed'"/>
+                        <field name="garage" readonly="state=='closed'"/>
+                         <field name="selleing_price" readonly="state=='closed'"/>
+                           <field name="expected_price" readonly="state=='closed'"/>
                         <field name="diff"/>
                     </group>
                     <group string="specific_info">
-                        <field name="post_code"/>
-                        <field name="garden"/>
-                        <field name="garden_orientation"/>
-                        <field name="bathrooms" />
-                        <field name="tag_ids" widget="many2many_tags"/>
-                       <field name="expected_selling_date"/>
-                        <field name="is_late" invisible="1"/>
+                        <field name="post_code" readonly="state=='closed'"/>
+                        <field name="garden" readonly="state=='closed'"/>
+                        <field name="garden_orientation" readonly="state=='closed'"/>
+                        <field name="bathrooms" readonly="state=='closed'"/>
+                        <field name="tag_ids" widget="many2many_tags" readonly="state=='closed'"/>
+                       <field name="expected_selling_date" readonly="state=='closed'"/>
+                        <field name="is_late" invisible="1" readonly="state=='closed'"/>
 
                     </group>
                 </group>
@@ -123,13 +124,14 @@
     </record>
 
 
-    <record id="server_action_state_id" model="ir.actions.server">
-        <field name="name">close</field>
+
+       <record id="change_action_state_id" model="ir.actions.server">
+        <field name="name">change close_state</field>
         <field name="model_id" ref="model_property"></field>
          <field name="binding_model_id" ref="model_property"></field>
         <field name="state">code</field>
          <field name="code">
-             actions=records.close_button()
+                action = records.change_state_action()
          </field>
     </record>
 

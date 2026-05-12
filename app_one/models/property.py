@@ -1,4 +1,5 @@
 from psycopg2._psycopg import Boolean
+from typing_extensions import ReadOnly
 
 from odoo import api, fields, models
 from odoo.cli.scaffold import env
@@ -11,7 +12,7 @@ class Property(models.Model):
     _inherit = ['mail.thread','mail.activity.mixin']
 
     name=fields.Char(size=2)
-    ref=fields.Char(default='New')
+    ref=fields.Char(default='New',readonly=1)
     post_code = fields.Char(required=True)
     livig_area = fields.Integer(required=True)
     faceds = fields.Integer()
@@ -51,9 +52,28 @@ class Property(models.Model):
     property_lines_id=fields.One2many('property.lines', 'property_id')
 
 
+    def change_state(self,old_state,new_state,reason ):
+        for rec in self:
+         rec.env['property.history'].create({
+           'user_id':self.env.uid,
+           'old_state':old_state,
+           'new_state':new_state,
+           'property_id':self.id,
+             'reason':reason or ""
+         }  )
 
 
 
+    def change_state_action(self):
+        action = self.env['ir.actions.actions']._for_xml_id(
+            'app_one.change_state_action_id'
+        )
+
+        action['context'] = {
+            'default_property_id': self.id
+        }
+
+        return action
 
 
 
@@ -68,14 +88,6 @@ class Property(models.Model):
                      record.is_late=True
 
             
-    def create_history_record(self,old_state,new_state):
-       for record in self:
-           record.env['property.history'].create({
-                  'property_id':record.id,
-                   'user_id':record.env.user.id,
-                   'old_state':old_state,
-                    'new_state':new_state,
-                })
 
 
     @api.constrains('livig_area')
@@ -95,9 +107,10 @@ class Property(models.Model):
 
     def create(self,vals_list):
         res=super().create(vals_list)
-        if res.ref=='New':
+        if res.ref=="New":
             res.ref=self.env['ir.sequence'].next_by_code('property_seq')
         return  res
+
 
 
     @api.model
@@ -119,19 +132,19 @@ class Property(models.Model):
 
 
     def draft_button(self):
-        self.create_history_record(self.state, 'draft')
+        self.change_state(self.state, 'draft')
         self.write({'state': 'draft'})
 
     def pending_button(self):
-        self.create_history_record(self.state, 'pending')
+        self.change_state(self.state, 'pending')
         self.write({'state': 'pending'})
 
     def sold_button(self):
-        self.create_history_record(self.state, 'sold')
+        self.change_state(self.state, 'sold')
         self.write({'state': 'sold'})
 
     def close_button(self):
-        self.create_history_record(self.state, 'closed')
+        self.change_state(self.state, 'closed')
         for rec in self:
             rec.state='closed'
 

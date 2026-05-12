@@ -51,7 +51,7 @@
 
                     <h1>Property Report</h1>
 
-                   <table class="property-report-table">
+                    <table class="property-report-table">
     <thead>
         <tr>
             <th colspan="2">General Info</th>
@@ -67,7 +67,7 @@
             <td><span t-out="rec.selleing_price or ''"/></td>
         </tr>
     </tbody>
-</table>
+                    </table>
 
 <table class="property-report-table">
     <thead>
@@ -78,7 +78,7 @@
     <tbody>
         <tr>
             <td class="label-cell">Owner Name</td>
-            <td><span t-out="rec.owner_id or ''"/></td>
+            <td><span t-out="rec.owner_id.name or ''"/></td>
         </tr>
         <tr>
             <td class="label-cell">Owner Phone</td>
@@ -92,4 +92,5 @@
 
         </t>
     </t>
-</template></odoo>
+</template>
+</odoo>

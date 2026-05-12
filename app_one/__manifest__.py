@@ -15,7 +15,7 @@
         ],
     },
     'data': [
-'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'views/base_menu.xml',
         'views/property_view.xml',
         'views/owner2_view.xml',
@@ -24,12 +24,14 @@
         'reports/property_report.xml',
         'data/property_sequence.xml',
         'views/property_history_view.xml',
+        'wizards/change_state.xml',
 
 
 
 
 
     ],
+    'images': ['static/description/icon.png'],
     'demo': [
 
     ],

@@ -1,12 +1,13 @@
 <odoo>
-     <record id="property_history_tree_view" model="ir.ui.view">
+<record id="property_History_tree_view" model="ir.ui.view">
          <field name="name">property </field>
          <field name="model">property.history</field>
          <field name="arch" type="xml">
               <list class="tree_style" >
+
+                  <field name="user_id"/>
                   <field name="property_id"/>
-                   <field name="user_id"/>
-                  <field name="old_state"/>
+                   <field name="old_state"/>
                   <field name="new_state"/>
 
               </list>
@@ -25,14 +26,13 @@
 
                 <group>
                     <group >
-                        <field name="old_state"/>
-                        <field name="user_id"/>
+                        <field name="user_id" readonly="1"/>
+                        <field name="property_id"  readonly="1"/>
 
                     </group>
                     <group >
-                        <field name="old_state"/>
-                        <field name="new_state"/>
-
+                        <field name="old_state"  readonly="1"/>
+                        <field name="new_state" readonly="1" />
 
                     </group>
                 </group>
@@ -43,13 +43,11 @@
         </form>
     </field>
 </record>
-
-
-
-
-    <record id="properties_history_action" model="ir.actions.act_window">
-        <field name="name">property </field>
+ <record id="history_action" model="ir.actions.act_window">
+        <field name="name">history</field>
         <field name="res_model">property.history</field>
+            <field name="view_mode">list,form</field>
     </record>
-<menuitem id="properties_history_view_id" name="property_history" parent="property_menu" action="properties_history_action"/>
+ <menuitem id="property_history_view_id" name="history" parent="property_menu" action="history_action"/>
+
 </odoo>

@@ -6,4 +6,5 @@
     <menuitem id="property_menu" name="Properties" parent="base_menu_root"/>
 
     <menuitem id="owner_menu" name="owners" parent="base_menu_root"/>
+   
 </odoo>
