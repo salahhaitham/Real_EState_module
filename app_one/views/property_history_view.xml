@@ -36,7 +36,17 @@
 
                     </group>
                 </group>
+      <notebook>
+                 <page string="bedrooms">
+                     <field name="property_Lines_ids" >
 
+                         <list >
+                             <field name="description" readonly="1"></field>
+                               <field name="area" readonly="1"></field>
+                         </list>
+                     </field>
+                 </page>
+             </notebook>
 
             </sheet>
 

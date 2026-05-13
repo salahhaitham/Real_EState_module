@@ -52,14 +52,15 @@ class Property(models.Model):
     property_lines_id=fields.One2many('property.lines', 'property_id')
 
 
-    def change_state(self,old_state,new_state,reason ):
+    def change_state(self,old_state,new_state,reason =""):
         for rec in self:
          rec.env['property.history'].create({
            'user_id':self.env.uid,
            'old_state':old_state,
            'new_state':new_state,
            'property_id':self.id,
-             'reason':reason or ""
+             'reason':reason or "",
+             'property_Lines_ids':[(0,0,{'description':line.description,'area':line.area})for line in rec.property_lines_id]
          }  )
 
 
