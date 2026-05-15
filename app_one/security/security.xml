@@ -1,0 +1,30 @@
+<odoo>
+    <record id="module_category_real_estate" model="ir.module.category">
+        <field name="name">Real Estate</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="res_groups_privilege_real_estate" model="res.groups.privilege">
+        <field name="name">Real Estate</field>
+        <field name="category_id" ref="module_category_real_estate"/>
+    </record>
+       <record id="property_user_id"
+            model="res.groups">
+
+        <field name="name">Property User</field>
+
+        <field name="privilege_id"
+               ref="res_groups_privilege_real_estate"/>
+
+        <field name="implied_ids"
+               eval="[(4, ref('base.group_user'))]"/>
+
+    </record>
+
+    <record id="property_manager_id" model="res.groups">
+        <field name="name">Property Manager</field>
+        <field name="privilege_id" ref="res_groups_privilege_real_estate"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+</odoo>

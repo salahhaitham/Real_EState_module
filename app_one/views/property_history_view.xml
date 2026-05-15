@@ -58,6 +58,10 @@
         <field name="res_model">property.history</field>
             <field name="view_mode">list,form</field>
     </record>
- <menuitem id="property_history_view_id" name="history" parent="property_menu" action="history_action"/>
+ <menuitem id="property_history_view_id" name="history"
+           parent="property_menu"
+           action="history_action"
+           groups="app_one.property_manager_id"
+ />
 
 </odoo>

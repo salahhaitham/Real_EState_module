@@ -1,0 +1,653 @@
+{
+    'name': 'Real Estate Management',
+    'version': '1.0',
+    'summary': 'My first custom module',
+    'description': """
+        هذا الموديول مثال لتعلم كيفية عمل Module في Odoo.
+        يمكنك إضافة Models و Views هنا.
+    """,
+    'author': 'Salah',
+    'category': 'Tools',
+    'depends': ['base','sale','mail'],
+    'assets': {
+        'web.assets_backend': [
+            'app_one/static/src/scss/property_form.css',
+        ],
+    },
+    'data': [
+        'security/ir.model.access.csv',
+        'views/base_menu.xml',
+        'views/property_view.xml',
+        'views/owner2_view.xml',
+        'views/tag_view.xml',
+        'views/sales_view_form.xml',
+        'reports/property_report.xml',
+        'data/property_sequence.xml',
+        'views/property_history_view.xml',
+        'wizards/change_state.xml',
+
+
+
+
+
+    ],
+    'images': ['static/description/icon.png'],
+    'demo': [
+
+    ],
+
+    'application': True,
+'installable': True,
+}
+from . import models
+from . import wizards    odoo/custom_addons/real_state_clean/app_one/wizards from . import change_state
+from odoo import fields, models
+
+class ChangeState(models.TransientModel):
+    _name = 'change.state'
+
+    property_id = fields.Many2one('property')
+    state = fields.Selection(
+        selection=[
+            ('draft', 'Draft'),
+            ('pending', 'Pending'),
+            ('sold', 'Sold'),
+            ('closed', 'Closed'),
+        ]
+    )
+    reason = fields.Char()
+    def Confirm_action(self):
+        self.property_id.state=self.state
+        self.property_id.change_state('closed',self.state,self.reason)  <odoo>
+
+  <record id="change_state_form" model="ir.ui.view">
+    <field name="name">property </field>
+    <field name="model">change.state</field>
+    <field name="arch" type="xml">
+        <form >
+            <sheet>
+
+
+                    <group >
+
+                        <field name="state" required="1"/>
+                         <field name="reason" required="1"/>
+
+                    </group>
+
+
+                <footer>
+                    <button  string="Cancel" special="cancel"/>
+                    <button name="Confirm_action" string="confirm" type="object" class="btn_primary" />
+                </footer>
+
+            </sheet>
+        </form>
+    </field>
+</record>
+
+    <record id="change_state_action_id" model="ir.actions.act_window">
+        <field name="name">property_wizard </field>
+        <field name="res_model">change.state</field>
+        <field name="view_id" ref="change_state_form"/>
+        <field name="target">new</field>
+        <field name="view_mode">form</field>
+    </record>
+
+</odoo>odoo/custom_addons/real_state_clean/app_one/views <odoo>
+
+
+
+    <menuitem id="base_menu_root" name="Real State"/>
+    <menuitem id="property_menu" name="Properties" parent="base_menu_root"/>
+
+    <menuitem id="owner_menu" name="owners" parent="base_menu_root"/>
+
+</odoo><odoo>
+     <record id="owner_tree_view" model="ir.ui.view">
+         <field name="name">owner </field>
+         <field name="model">owner</field>
+         <field name="arch" type="xml">
+              <list>
+                  <field name="name"/>
+                  <field name="phone"/>
+                  <field name="address"/>
+                  <field name="property_ids" widget="one2many"/>
+
+
+
+              </list>
+         </field>
+
+     </record>
+
+
+
+
+<record id="owner_form" model="ir.ui.view">
+    <field name="name">owner form</field>
+    <field name="model">owner</field>
+    <field name="arch" type="xml">
+        <form >
+            <sheet>
+               <div class="oe_title">
+    <label for="name"/>
+    <h1>
+        <field name="name"/>
+    </h1>
+</div>
+                <group>
+
+                        <field name="phone"/>
+
+                        <field name="address"/>
+
+                </group>
+                 <group>
+
+
+
+                        <field name="property_ids" widget="many2many_tags"/>
+
+                </group>
+
+            </sheet>
+        </form>
+    </field>
+</record>
+
+    <record id="owner_action" model="ir.actions.act_window">
+        <field name="name">owner </field>
+        <field name="res_model">owner</field>
+            <field name="view_mode">list,form</field>
+
+    </record>
+<menuitem id="owner_view_id" name="owner" parent="owner_menu" action="owner_action"/>
+</odoo><odoo>
+     <record id="property_tree_view" model="ir.ui.view">
+         <field name="name">property </field>
+         <field name="model">property</field>
+         <field name="arch" type="xml">
+              <list class="tree_style" decoration-danger="is_late">
+                  <field name="name"/>
+                   <field name="description"/>
+
+                  <field name="is_late" column_invisible="True"/>
+                  <field name="owner_id"/>
+                  <field name="state"/>
+                   <field name="date_available"/>
+                  <field name="garage"/>
+                  <field name="garden"/>
+                  <field name="post_code"/>
+                  <field name="livig_area"/>
+                  <field name="expected_price"/>
+                  <field name="selleing_price"/>
+                  <field name="faceds"/>
+                  <field name="garden_orientation"/>
+                    <field name="bathrooms" optional="1"/>
+
+              </list>
+         </field>
+
+     </record>
+
+  <record id="property_search_view" model="ir.ui.view">
+         <field name="name">property search</field>
+         <field name="model">property</field>
+         <field name="arch" type="xml">
+              <search>
+
+                  <field name="name"/>
+                  <field name="post_code"/>
+
+                  <filter name="with_garden" string="With Garden" domain="[('garden','=',True)]"/>
+                   <filter name="without_garden" string="Without Garden" domain="[('garden','=',False)]"/>
+                  <filter name="with_garage" string="With garage" domain="[('garage','=',True)]"/>
+                    <filter name="garage" string="garage" context="{'group_by':'garage'}"/>
+              </search>
+         </field>
+
+     </record>
+
+<record id="property_form" model="ir.ui.view">
+    <field name="name">property </field>
+    <field name="model">property</field>
+    <field name="arch" type="xml">
+        <form >
+            <sheet>
+                <header >
+
+                    <button name="draft_button" string="Draft" type="object" class="btn_primary" invisible="state in ('draft','closed')"/>
+                    <button name="pending_button" string="Pending" type="object" class="btn_secondary" invisible="state != 'draft'"/>
+                    <button name="sold_button" string="Sold" type="object" class="btn_success" invisible="state != 'pending'"/>
+                     <field name="state" widget="statusbar" statusbar_visible="draft,pending,sold,closed"/>
+                </header>
+               <div class="oe_title">
+                    <label for="ref"/>
+    <h1>
+        <field name="ref"/>
+    </h1>
+    <label for="name"/>
+    <h3>
+        <field name="name" readonly="state=='closed'"/>
+    </h3>
+</div>
+                <group>
+                    <group string="general_info">
+                        <field name="faceds" readonly="state=='closed'"/>
+                        <field name="owner_id" readonly="state=='closed'"/>
+                        <field name="owner_phone" readonly="state=='closed'"/>
+                        <field name="owner_address" readonly="state=='closed'"/>
+                        <field name="livig_area" readonly="state=='closed'"/>
+                        <field name="date_available" readonly="state=='closed'"/>
+                        <field name="garage" readonly="state=='closed'"/>
+                         <field name="selleing_price" readonly="state=='closed'"/>
+                           <field name="expected_price" readonly="state=='closed'"/>
+                        <field name="diff"/>
+                    </group>
+                    <group string="specific_info">
+                        <field name="post_code" readonly="state=='closed'"/>
+                        <field name="garden" readonly="state=='closed'"/>
+                        <field name="garden_orientation" readonly="state=='closed'"/>
+                        <field name="bathrooms" readonly="state=='closed'"/>
+                        <field name="tag_ids" widget="many2many_tags" readonly="state=='closed'"/>
+                       <field name="expected_selling_date" readonly="state=='closed'"/>
+                        <field name="is_late" invisible="1" readonly="state=='closed'"/>
+
+                    </group>
+                </group>
+                <group>
+                            <field name="description"/>
+                </group>
+             <notebook>
+                 <page string="bedrooms">
+                     <field name="property_lines_id" >
+
+                         <list editable="bottom">
+                             <field name="description"></field>
+                               <field name="area"></field>
+                         </list>
+                     </field>
+                 </page>
+             </notebook>
+            </sheet>
+            <chatter/>
+        </form>
+    </field>
+</record>
+
+
+    <record id="automated_action_id" model="ir.cron">
+        <field name="name">check property Date</field>
+        <field name="model_id" ref="model_property"> </field>
+        <field name="state" >code</field>
+        <field name="code" >model.check_expected_sellingDate() </field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+
+        <field name="active">True</field>
+    </record>
+
+
+
+       <record id="change_action_state_id" model="ir.actions.server">
+        <field name="name">change close_state</field>
+        <field name="model_id" ref="model_property"></field>
+         <field name="binding_model_id" ref="model_property"></field>
+        <field name="state">code</field>
+         <field name="code">
+                action = records.change_state_action()
+         </field>
+    </record>
+
+    <record id="properties_action" model="ir.actions.act_window">
+        <field name="name">property </field>
+        <field name="res_model">property</field>
+    </record>
+<menuitem id="properties_view_id" name="properties" parent="property_menu" action="properties_action"/>
+</odoo>
+<odoo>
+<record id="property_History_tree_view" model="ir.ui.view">
+         <field name="name">property </field>
+         <field name="model">property.history</field>
+         <field name="arch" type="xml">
+              <list class="tree_style" >
+
+                  <field name="user_id"/>
+                  <field name="property_id"/>
+                   <field name="old_state"/>
+                  <field name="new_state"/>
+
+              </list>
+         </field>
+
+     </record>
+
+
+
+<record id="property_history_form" model="ir.ui.view">
+    <field name="name">property </field>
+    <field name="model">property.history</field>
+    <field name="arch" type="xml">
+        <form >
+            <sheet>
+
+                <group>
+                    <group >
+                        <field name="user_id" readonly="1"/>
+                        <field name="property_id"  readonly="1"/>
+
+                    </group>
+                    <group >
+                        <field name="old_state"  readonly="1"/>
+                        <field name="new_state" readonly="1" />
+
+                    </group>
+                </group>
+      <notebook>
+                 <page string="bedrooms">
+                     <field name="property_Lines_ids" >
+
+                         <list >
+                             <field name="description" readonly="1"></field>
+                               <field name="area" readonly="1"></field>
+                         </list>
+                     </field>
+                 </page>
+             </notebook>
+
+            </sheet>
+
+        </form>
+    </field>
+</record>
+ <record id="history_action" model="ir.actions.act_window">
+        <field name="name">history</field>
+        <field name="res_model">property.history</field>
+            <field name="view_mode">list,form</field>
+    </record>
+ <menuitem id="property_history_view_id" name="history" parent="property_menu" action="history_action"/>
+
+</odoo>
+<odoo>
+
+    <record id="sale_view_form_inherit" model="ir.ui.view">
+        <field name="name">sale order form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="before">
+                <field name="property_id"/>
+                <field name="price"/>
+            </field>
+
+        </field>
+                 </record>
+
+</odoo>odoo/custom_addons/real_state_clean/app_one/static/src/scss/property_form.css .o_list_view.tree_style .o_list_table,
+.o_list_view .tree_style .o_list_table,
+.o_content .tree_style .o_list_table {
+    width: 100% !important;
+    table-layout: fixed !important;
+}
+
+.o_list_view.tree_style .o_list_table thead > tr > th,
+.o_list_view.tree_style .o_list_table tbody > tr > td,
+.o_list_view .tree_style .o_list_table thead > tr > th,
+.o_list_view .tree_style .o_list_table tbody > tr > td,
+.o_content .tree_style .o_list_table thead > tr > th,
+.o_content .tree_style .o_list_table tbody > tr > td {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.o_list_view.tree_style .o_list_table thead > tr > th,
+.o_list_view .tree_style .o_list_table thead > tr > th,
+.o_content .tree_style .o_list_table thead > tr > th {
+    color: #ffffff !important;
+    background-color: #73a7f3 !important;
+}
+
+.o_list_view.tree_style .o_list_table tbody > tr > td,
+.o_list_view .tree_style .o_list_table tbody > tr > td,
+.o_content .tree_style .o_list_table tbody > tr > td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.o_list_view.tree_style .o_list_table tbody > tr:not(.text-danger) > td,
+.o_list_view .tree_style .o_list_table tbody > tr:not(.text-danger) > td,
+.o_content .tree_style .o_list_table tbody > tr:not(.text-danger) > td {
+    color: #000000 !important;
+}
+
+.o_list_view.tree_style .o_list_table tbody > tr.text-danger > td,
+.o_list_view .tree_style .o_list_table tbody > tr.text-danger > td,
+.o_content .tree_style .o_list_table tbody > tr.text-danger > td {
+    color: #b42318 !important;
+    background-color: #fef3f2;
+}
+odoo/custom_addons/real_state_clean/app_one/security/ir.model.access.csv id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_property,access_property,model_property,,1,1,1,1
+access_owner,access_owner,model_owner,,1,1,1,1
+access_tag,access_tag,model_tag,,1,1,1,1
+access_property_lines,access_property_lines,model_property_lines,,1,1,1,1
+access_property_history,access_property_history,model_property_history,,1,1,1,0
+access_change_state,access_change_state,model_change_state,,1,1,1,0
+access_property_history_lines,access_property_history_lines,model_property_history_lines,,1,1,1,1 from psycopg2._psycopg import Boolean
+from typing_extensions import ReadOnly
+
+from odoo import api, fields, models
+from odoo.cli.scaffold import env
+from odoo.exceptions import ValidationError
+
+
+class Property(models.Model):
+    _name='property'
+    _description = 'Property1'
+    _inherit = ['mail.thread','mail.activity.mixin']
+
+    name=fields.Char(size=2)
+    ref=fields.Char(default='New',readonly=1)
+    post_code = fields.Char(required=True)
+    livig_area = fields.Integer(required=True)
+    faceds = fields.Integer()
+    description = fields.Text()
+    date_available = fields.Date(tracking=True)
+    expected_selling_date = fields.Date()
+    is_late = fields.Boolean()
+    expected_price=fields.Float(digits=(0,2))
+    selleing_price=fields.Float()
+    bedrooms=fields.Integer()
+    bathrooms=fields.Integer()
+    diff=fields.Float(compute='_compute_diff')
+    garage=fields.Boolean()
+    garden=fields.Boolean()
+    active=fields.Boolean(default=True)
+    state=fields.Selection(
+        selection=[
+            ('draft', 'Draft'),
+            ('pending', 'Pending'),
+            ('sold', 'Sold'),
+            ('closed', 'Closed'),
+        ],default='draft'
+    )
+    garden_orientation= fields.Selection(
+       [
+           ('south','South'),
+           ('north','North'),
+           ('west', 'West'),
+           ('east', 'East'),
+
+        ],default='south'
+    )
+    owner_id=fields.Many2one('owner')
+    owner_phone=fields.Char(related='owner_id.phone')
+    owner_address= fields.Char(related='owner_id.address')
+    tag_ids=fields.Many2many('tag',)
+    property_lines_id=fields.One2many('property.lines', 'property_id')
+
+
+    def change_state(self,old_state,new_state,reason =""):
+        for rec in self:
+         rec.env['property.history'].create({
+           'user_id':self.env.uid,
+           'old_state':old_state,
+           'new_state':new_state,
+           'property_id':self.id,
+             'reason':reason or "",
+             'property_Lines_ids':[(0,0,{'description':line.description,'area':line.area})for line in rec.property_lines_id]
+         }  )
+
+
+
+    def change_state_action(self):
+        action = self.env['ir.actions.actions']._for_xml_id(
+            'app_one.change_state_action_id'
+        )
+
+        action['context'] = {
+            'default_property_id': self.id
+        }
+
+        return action
+
+
+
+
+    _sql_constraints = [('unique_name','unique (name)','name is unique')]
+
+
+    def check_expected_sellingDate(self):
+       property_ids=self.search([])
+       for record in property_ids:
+            if record.expected_selling_date and record.expected_selling_date<fields.Datetime.today():
+                     record.is_late=True
+
+
+
+
+    @api.constrains('livig_area')
+    def _check_livig_area(self):
+        for record in self:
+            if record.livig_area==0:
+                raise ValidationError("Living Area cannot be 0")
+
+    @api.onchange('selleing_price')
+    def _onchange_selleing_price(self):
+        for record in self:
+            if record.selleing_price<0:
+               return {
+                'warning':{'title':'warning','message':'assign negative value' ,'type':'notification'},
+                }
+
+
+    def create(self,vals_list):
+        res=super().create(vals_list)
+        if res.ref=="New":
+            res.ref=self.env['ir.sequence'].next_by_code('property_seq')
+        return  res
+
+
+
+    @api.model
+    def web_search_read(self, *args, **kwargs):
+        print("SEARCH")
+        return super().web_search_read(*args, **kwargs)
+
+    def unlink(self) :
+        print("delete method")
+        return super().unlink()
+    def write(self, vals):
+        res = super(Property, self).write(vals)
+        print("writeee method")
+        return res
+    @api.depends('expected_price','selleing_price')
+    def _compute_diff(self):
+        for record in self:
+            record.diff=record.expected_price-record.selleing_price
+
+
+    def draft_button(self):
+        self.change_state(self.state, 'draft')
+        self.write({'state': 'draft'})
+
+    def pending_button(self):
+        self.change_state(self.state, 'pending')
+        self.write({'state': 'pending'})
+
+    def sold_button(self):
+        self.change_state(self.state, 'sold')
+        self.write({'state': 'sold'})
+
+    def close_button(self):
+        self.change_state(self.state, 'closed')
+        for rec in self:
+            rec.state='closed'
+
+
+
+
+class Property_Lines(models.Model):
+    _name='property.lines'
+    property_id=fields.Many2one('property')
+    description=fields.Text()
+    area=fields.Integer()
+from odoo import models, fields
+
+class EstateProperty(models.Model):
+    _name = 'estate.property'
+    _description = 'Estate Property'
+
+    name = fields.Char()
+
+from odoo import api, fields, models
+
+
+
+class Property_history(models.Model):
+    _name = 'property.history'
+
+
+    user_id = fields.Many2one('res.users')
+    property_id = fields.Many2one('property')
+    old_state=fields.Char()
+    new_state=fields.Char()
+    reason=fields.Char()
+    property_Lines_ids=fields.One2many('property.history.lines','history_id',)
+
+
+class Property_history_Lines(models.Model):
+    _name='property.history.lines'
+    history_id=fields.Many2one('property.history')
+    description=fields.Text()
+    area=fields.Integer()
+from odoo import models, fields,api
+
+
+class Sales_order(models.Model):
+     _inherit = 'sale.order'
+     property_id=fields.Many2one('property')
+     price= fields.Float(compute='_compute_price', store=True)
+
+     def action_confirm(self):
+         rec=super().action_confirm()
+         print("inside action_confirm")
+         return rec
+
+     @api.depends('property_id', 'property_id.selleing_price')
+     def _compute_price(self):
+         for record in self:
+             record.price = record.property_id.selleing_price or 0.0
+<odoo>
+
+<record id="property_sequence" model="ir.sequence">
+
+    <field name="name">property_seq</field>
+    <field name="code">property_seq</field>
+    <field name="prefix">PRT</field>
+    <field name="padding">3</field>
+</record>
+
+</odoo>

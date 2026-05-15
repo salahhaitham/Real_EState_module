@@ -63,18 +63,31 @@ class Property(models.Model):
              'property_Lines_ids':[(0,0,{'description':line.description,'area':line.area})for line in rec.property_lines_id]
          }  )
 
+    def action_btn(self):
+        print("action btn")
+        print(       self.env['property'].search(['&',('name','=','A2'),('is_late','=','false')]))
 
 
-    def change_state_action(self):
-        action = self.env['ir.actions.actions']._for_xml_id(
-            'app_one.change_state_action_id'
-        )
 
-        action['context'] = {
-            'default_property_id': self.id
-        }
+    def change_state_wizard(self):
 
-        return action
+        action=self.env['ir.actions.actions']._for_xml_id('app_one.change_state_wizard_action')
+        action['context']={'default_property_id':self.id}
+
+        return  action
+
+
+
+    # def change_state_action(self):
+    #     action = self.env['ir.actions.actions']._for_xml_id(
+    #         'app_one.change_state_action_id'
+    #     )
+    #
+    #     action['context'] = {
+    #         'default_property_id': self.id
+    #     }
+    #
+    #     return action
 
 
 
