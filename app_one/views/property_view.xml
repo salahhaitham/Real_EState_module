@@ -49,8 +49,7 @@
     <field name="model">property</field>
     <field name="arch" type="xml">
         <form >
-            <sheet>
-                <header >
+      <header >
 
                     <button name="draft_button" string="Draft" type="object" class="btn_primary" invisible="state in ('draft','closed')"/>
                     <button name="pending_button" string="Pending" type="object" class="btn_secondary" invisible="state != 'draft'"/>
@@ -58,6 +57,20 @@
                     <button name="action_btn" string="Action" type="object" class="btn_success" />
                      <field name="state" widget="statusbar" statusbar_visible="draft,pending,sold,closed"/>
                 </header>
+            <sheet>
+              <div name="button_box" class="oe_button_box">
+                  <button name="open_owner_id" string="Owner" invisible="not owner_id" type="object" icon="fa-user"/>
+              </div>
+                <widget name="web_ribbon"
+                        title="Archived"
+                         bg_color="bg-danger"
+                         invisible="active"/>
+                 <widget name="web_ribbon"
+                        title="Sold"
+                         bg_color="bg-success"
+                         invisible="state != 'sold'"/>
+
+
                <div class="oe_title">
                     <label for="ref"/>
     <h1>

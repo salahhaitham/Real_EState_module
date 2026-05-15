@@ -1,10 +1,6 @@
-from psycopg2._psycopg import Boolean
-from typing_extensions import ReadOnly
 
 from odoo import api, fields, models
-from odoo.cli.scaffold import env
 from odoo.exceptions import ValidationError
-
 
 class Property(models.Model):
     _name='property'
@@ -12,6 +8,7 @@ class Property(models.Model):
     _inherit = ['mail.thread','mail.activity.mixin']
 
     name=fields.Char(size=2)
+
     ref=fields.Char(default='New',readonly=1)
     post_code = fields.Char(required=True)
     livig_area = fields.Integer(required=True)
@@ -50,6 +47,19 @@ class Property(models.Model):
     owner_address= fields.Char(related='owner_id.address')
     tag_ids=fields.Many2many('tag',)
     property_lines_id=fields.One2many('property.lines', 'property_id')
+
+
+
+    # /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+   
+    def open_owner_id(self):
+        action=self.env['ir.actions.actions']._for_xml_id('app_one.owner_action')
+        view_id=self.env.ref('app_one.owner_form').id
+        action['res_id']=self.owner_id.id
+        action['views']=[[view_id,'form']]
+        return action
 
 
     def change_state(self,old_state,new_state,reason =""):
