@@ -19,7 +19,7 @@
                   <field name="selleing_price"/>
                   <field name="faceds"/>
                   <field name="garden_orientation"/>
-                    <field name="bathrooms" optional="1"/>
+                  <field name="bathrooms" optional="1"/>
 
               </list>
          </field>
@@ -58,6 +58,8 @@
                      <field name="state" widget="statusbar" statusbar_visible="draft,pending,sold,closed"/>
                 </header>
             <sheet>
+
+
               <div name="button_box" class="oe_button_box">
                   <button name="open_owner_id" string="Owner" invisible="not owner_id" type="object" icon="fa-user"/>
               </div>

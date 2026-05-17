@@ -49,7 +49,7 @@
             <div class="page">
                 <t t-foreach="docs" t-as="rec">
 
-                    <h1>Property Report</h1>
+                    <h1 style="font-family:'Roboto-italic';">Property Report</h1>
 
                     <table class="property-report-table">
     <thead>

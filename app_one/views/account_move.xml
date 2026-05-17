@@ -1,0 +1,14 @@
+<odoo>
+
+    <record id="account_view_form_inherit" model="ir.ui.view">
+        <field name="name">account  form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+          <header position="inside">
+    <button name="action_confirm" string="My Button" type="object" class="btn-primary"/>
+</header>
+        </field>
+                 </record>
+
+</odoo>

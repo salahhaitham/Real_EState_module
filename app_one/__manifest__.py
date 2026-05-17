@@ -8,11 +8,12 @@
     """,
     'author': 'Salah',
     'category': 'Tools',
-    'depends': ['base','sale','mail'],
+    'depends': ['base','sale','mail','account'],
     'assets': {
-        'web.assets_backend': [
-            'app_one/static/src/scss/property_form.css',
-        ],
+        'web.assets_backend': ['app_one/static/src/scss/property_form.css',],
+        'web.report_assets_common': ['odoo/custom_addons/real_state_clean/app_one/static/src/scss/font.css'],
+
+
     },
     'data': [
         'security/security.xml',
@@ -26,6 +27,7 @@
         'data/property_sequence.xml',
         'views/property_history_view.xml',
         'wizards/change_state.xml',
+        'views/account_move.xml',
 
 
 
